@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+logs/
+pipeline_output/
+.vscode
+backups/
+legacy/
