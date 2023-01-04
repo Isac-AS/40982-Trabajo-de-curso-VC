@@ -33,9 +33,23 @@ def compute_sort():
     for image_path, image_name in images:
         # TODO
         # Face detection
-        face_detection(image_path, models[2], metrics[2])
+        print("before")
+        status, path, distance = face_detection(image_path, output_dir, models[2], metrics[2])
+        if status == 0:
+            new_path = f"{output_dir}/face_{faces_discovered_counter}"
+            faces_discovered_counter += 1
 
-        # Embeddings
+            # Directory creation
+            os.mkdir(new_path)
+
+            # Moving the file to the new directory
+            output_path = f"{new_path}/{image_name}"
+            # Copy the file
+            shutil.copyfile(image_path, output_path)
+
+        else:
+            print("doing")
+            # Embeddings
         detected_embeddings = "(^w^)"
 
         new_face_detected = True
@@ -70,11 +84,26 @@ def compute_sort():
             # Add the entry to the dictionary
             recognized_faces[detected_embeddings] = new_path
 
-    print(f"\n\nImages in folder:\n{images}")
+        print(f"\n\nImages in folder:\n{images}")
+        print("after")
 
 
-def face_detection(path, model, metric):
+def face_detection(path, output_dir, model, metric):
 
-    df = DeepFace.find(img_path = path, db_path = "face_recognition_images/", model_name=model, distance_metric = metric, prog_bar = False, enforce_detection=False, silent = True)
+    aux_output_dir = output_dir + '/'
+    print(path)
+    print("checking")
+    if (len(os.listdir(output_dir)) == 0):
+        print("returning 0")
+        return 0, 0, 0
 
-    return df
+    print("in")
+    df = DeepFace.find(img_path = path, db_path = 'D:/GII/Cuarto/Vision-por-Computador/40982-Trabajo-de-curso-VC/testfolder/', model_name=model, distance_metric = metric, prog_bar = False, enforce_detection=False, silent = True)
+    print("out")
+    if df.empty:
+        print("not recognised")
+        return 0, 0, 0
+    else:
+        print("recognised")
+        print(df.to_string())
+        return 0, df.at[0, 'identity'], df.at[0, 'Facenet512_euclidean_l2']
