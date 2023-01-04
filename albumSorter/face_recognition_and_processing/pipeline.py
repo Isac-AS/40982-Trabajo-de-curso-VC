@@ -1,14 +1,20 @@
 import os
 import shutil
 from tools.preference_file_handler import PreferenceFileHandler
-
-
+from deepface import DeepFace
+import os
+import numpy as np
 def compute_sort():
     """
     The sort action refers to create a directory for each of the faces recognized
     within the images under the provided directory and fill each of the created
     directories with the images that contain the respective face.
     """
+
+    models = ["VGG-Face","Facenet","Facenet512","OpenFace","DeepFace","DeepID","ArcFace","Dlib","SFace"]
+    metrics = ["cosine", "euclidean", "euclidean_l2"]
+    backends = ['opencv','ssd','dlib','mtcnn','retinaface','mediapipe']
+
     input_dir = PreferenceFileHandler.get_base_directory()
     output_dir = PreferenceFileHandler.get_output_directory()
 
@@ -27,7 +33,7 @@ def compute_sort():
     for image_path, image_name in images:
         # TODO
         # Face detection
-        face_detection(image_path)
+        face_detection(image_path, models[2], metrics[2])
 
         # Embeddings
         detected_embeddings = "(^w^)"
@@ -67,5 +73,8 @@ def compute_sort():
     print(f"\n\nImages in folder:\n{images}")
 
 
-def face_detection(path):
-    return
+def face_detection(path, model, metric):
+
+    df = DeepFace.find(img_path = path, db_path = "face_recognition_images/", model_name=model, distance_metric = metric, prog_bar = False, enforce_detection=False, silent = True)
+
+    return df
