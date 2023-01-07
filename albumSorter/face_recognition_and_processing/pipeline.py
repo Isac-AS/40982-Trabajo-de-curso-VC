@@ -27,12 +27,18 @@ def compute_sort():
     # Non elegant name of producing dir names
     faces_discovered_counter = 0
 
+    # Different faces for embeddings directory creation
+    db_images = f"{output_dir}/aux-faces"
+    representations_path = f"{db_images}/representations_arcface.pkl"
+    os.mkdir(db_images)
+
     for image_path, image_name in images:
         # TODO
         # Face detection
-        status, path, distance = face_detection(image_path, output_dir, models[6], metrics[0])
+        status, path, distance = face_detection(image_path, db_images, models[6], metrics[0])
         if status == 0:
             new_path = f"{output_dir}/face_{faces_discovered_counter}"
+            aux_output_path = f"{db_images}/face_{faces_discovered_counter}{os.path.splitext(image_name)[1]}"
             faces_discovered_counter += 1
 
             # Directory creation
@@ -40,23 +46,30 @@ def compute_sort():
 
             # Moving the file to the new directory
             output_path = f"{new_path}/{image_name}"
+            
             # Copy the file
             shutil.copyfile(image_path, output_path)
 
+            # Copy the file to aux-faces
+            shutil.copyfile(image_path, aux_output_path)
+            
+            if os.path.exists(representations_path):
+                os.remove(representations_path)
+
         else:
-            output_path = f"{os.path.dirname(path)}/{image_name}"
+            base=os.path.basename(path)
+            output_path = f"{output_dir}/{os.path.splitext(base)[0]}/{image_name}"
             shutil.copyfile(image_path, output_path)
 
 
 def face_detection(path, output_dir, model, metric):
 
+    print(output_dir)
     if (len(os.listdir(output_dir)) == 0):
         return 0, 0, 0
 
     aux_output_dir = output_dir + '/'
     df = DeepFace.find(img_path = path, db_path = aux_output_dir, model_name=model, distance_metric = metric, prog_bar = False, enforce_detection=False, silent = True)
-    representations_path = f"{output_dir}/representations_arcface.pkl"
-    os.remove(representations_path)
 
     if df.empty:
         return 0, 0, 0
