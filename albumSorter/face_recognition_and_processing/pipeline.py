@@ -30,7 +30,7 @@ def compute_sort():
     for image_path, image_name in images:
         # TODO
         # Face detection
-        status, path, distance = face_detection(image_path, output_dir, models[6], metrics[2])
+        status, path, distance = face_detection(image_path, output_dir, models[6], metrics[0])
         if status == 0:
             new_path = f"{output_dir}/face_{faces_discovered_counter}"
             faces_discovered_counter += 1
@@ -55,11 +55,11 @@ def face_detection(path, output_dir, model, metric):
 
     aux_output_dir = output_dir + '/'
     df = DeepFace.find(img_path = path, db_path = aux_output_dir, model_name=model, distance_metric = metric, prog_bar = False, enforce_detection=False, silent = True)
-    representations_path = f"{output_dir}/representations_ArcFace.pkl"
+    representations_path = f"{output_dir}/representations_arcface.pkl"
     os.remove(representations_path)
 
     if df.empty:
         return 0, 0, 0
     else:
         print(df.to_string())
-        return 1, df.at[0, 'identity'], df.at[0, 'ArcFace_euclidean_l2']
+        return 1, df.at[0, 'identity'], df.at[0, 'ArcFace_cosine']
