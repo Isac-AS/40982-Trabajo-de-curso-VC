@@ -30,7 +30,7 @@ def compute_sort():
     for image_path, image_name in images:
         # TODO
         # Face detection
-        status, path, distance = face_detection(image_path, output_dir, models[6], metrics[0])
+        status, path, distance = face_detection(image_path, output_dir, models[6], metrics[1])
         if status == 0:
             new_path = f"{output_dir}/face_{faces_discovered_counter}"
             faces_discovered_counter += 1
@@ -62,4 +62,4 @@ def face_detection(path, output_dir, model, metric):
         return 0, 0, 0
     else:
         print(df.to_string())
-        return 1, df.at[0, 'identity'], df.at[0, 'ArcFace_cosine']
+        return 1, df.at[0, 'identity'], df.at[0, 'ArcFace_euclidean']
