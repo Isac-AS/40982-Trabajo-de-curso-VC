@@ -64,7 +64,6 @@ def compute_sort():
 
 def face_detection(path, output_dir, model, metric):
 
-    print(output_dir)
     if (len(os.listdir(output_dir)) == 0):
         return 0, 0, 0
 
