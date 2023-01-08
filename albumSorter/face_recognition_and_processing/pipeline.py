@@ -36,10 +36,14 @@ def compute_sort():
         # TODO
         # Face detection
 <<<<<<< HEAD
+<<<<<<< HEAD
         status, path, distance = face_detection(image_path, db_images, models[2], metrics[2])
 =======
         status, path, distance = face_detection(image_path, output_dir, models[6], metrics[1])
 >>>>>>> 516d930 (added some test results)
+=======
+        status, path, distance = face_detection(image_path, output_dir, models[6], metrics[1])
+>>>>>>> 516d9306b5d325b6fbba04f3402cae2017507b2b
         if status == 0:
             new_path = f"{output_dir}/face_{faces_discovered_counter}"
             aux_output_path = f"{db_images}/face_{faces_discovered_counter}{os.path.splitext(image_name)[1]}"
@@ -79,7 +83,11 @@ def face_detection(path, output_dir, model, metric):
     else:
         print(df.to_string())
 <<<<<<< HEAD
+<<<<<<< HEAD
         return 1, df.at[0, 'identity'], df.at[0, 'Facenet512_euclidean_l2']
 =======
         return 1, df.at[0, 'identity'], df.at[0, 'ArcFace_euclidean']
 >>>>>>> 516d930 (added some test results)
+=======
+        return 1, df.at[0, 'identity'], df.at[0, 'ArcFace_euclidean']
+>>>>>>> 516d9306b5d325b6fbba04f3402cae2017507b2b
