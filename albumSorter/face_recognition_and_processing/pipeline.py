@@ -33,7 +33,6 @@ def compute_sort():
     os.mkdir(db_images)
 
     for image_path, image_name in images:
-        # TODO
         # Face detection
         status, path, distance = face_detection(image_path, db_images, models[2], metrics[2])
         if status == 0:
