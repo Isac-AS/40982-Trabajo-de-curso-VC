@@ -11,7 +11,7 @@ def compute_sort():
     directories with the images that contain the respective face.
     """
 
-    models = ["VGG-Face","Facenet","Facenet512","OpenFace","DeepFace","DeepID","ArcFace","Dlib","SFace"]
+    models = ["VGG-Face","Facenet","Facenet512","OpenFace","DeepFace","DeepID","ArcFace","SFace"]
     metrics = ["cosine", "euclidean", "euclidean_l2"]
     backends = ['opencv','ssd','dlib','mtcnn','retinaface','mediapipe']
 
@@ -29,13 +29,13 @@ def compute_sort():
 
     # Different faces for embeddings directory creation
     db_images = f"{output_dir}/aux-faces"
-    representations_path = f"{db_images}/representations_arcface.pkl"
+    representations_path = f"{db_images}/representations_sface.pkl"
     os.mkdir(db_images)
 
     for image_path, image_name in images:
         # TODO
         # Face detection
-        status, path, distance = face_detection(image_path, db_images, models[6], metrics[0])
+        status, path, distance = face_detection(image_path, db_images, models[7], metrics[2])
         if status == 0:
             new_path = f"{output_dir}/face_{faces_discovered_counter}"
             aux_output_path = f"{db_images}/face_{faces_discovered_counter}{os.path.splitext(image_name)[1]}"
@@ -75,4 +75,4 @@ def face_detection(path, output_dir, model, metric):
         return 0, 0, 0
     else:
         print(df.to_string())
-        return 1, df.at[0, 'identity'], df.at[0, 'ArcFace_cosine']
+        return 1, df.at[0, 'identity'], df.at[0, 'SFace_euclidean_l2']
