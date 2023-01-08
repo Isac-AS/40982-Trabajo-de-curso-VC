@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import QMainWindow
 from tools.preference_file_handler import PreferenceFileHandler
 from face_recognition_and_processing.pipeline import compute_sort
 from file_checker import get_current_output_subdirectory
+import time
+import os
 
 class Album_Sorter_Window(QMainWindow):
 
@@ -122,9 +124,14 @@ class Album_Sorter_Window(QMainWindow):
         """
         Will attempt to carry out the face recognition and classification algorithm on the selected folder.
         """
+        _translate = QtCore.QCoreApplication.translate
+        self.sortingAction.setText(_translate("Sorter window", "  In progress ...  "))
+        self.sortingAction.repaint()
         self.save_base_directory()
         PreferenceFileHandler.set_output_directory(get_current_output_subdirectory())
         compute_sort()
+        os.system(f"start {os.path.abspath(PreferenceFileHandler.get_output_directory())}")
+        self.sortingAction.setText(_translate("Sorter window", "  Compute new sort!  "))
         return None
 
     def browse_action(self):
